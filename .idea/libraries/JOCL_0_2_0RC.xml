@@ -1,0 +1,16 @@
+<component name="libraryTable">
+  <library name="JOCL-0.2.0RC">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/lib/JOCL-0.2.0RC.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$PROJECT_DIR$/lib/JOCL-0.2.0RC.jar!/doc" />
+    </JAVADOC>
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/dll" />
+    </NATIVE>
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/lib/JOCL-0.2.0RC.jar!/" />
+    </SOURCES>
+  </library>
+</component>

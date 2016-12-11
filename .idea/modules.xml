@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/DeviceQuery/DeviceQuery.iml" filepath="$PROJECT_DIR$/DeviceQuery/DeviceQuery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/Matmul/Matmul.iml" filepath="$PROJECT_DIR$/Matmul/Matmul.iml" />
+      <module fileurl="file://$PROJECT_DIR$/OpenCL.iml" filepath="$PROJECT_DIR$/OpenCL.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SerialMandelbrot/SerialMandelbrot.iml" filepath="$PROJECT_DIR$/SerialMandelbrot/SerialMandelbrot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/SimpleMandelbrot/SimpleMandelbrot.iml" filepath="$PROJECT_DIR$/SimpleMandelbrot/SimpleMandelbrot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/charsStrings/charsStrings.iml" filepath="$PROJECT_DIR$/charsStrings/charsStrings.iml" />
+      <module fileurl="file://$PROJECT_DIR$/initColorMap/initColorMap.iml" filepath="$PROJECT_DIR$/initColorMap/initColorMap.iml" />
+      <module fileurl="file://$PROJECT_DIR$/md5Crack/md5Crack.iml" filepath="$PROJECT_DIR$/md5Crack/md5Crack.iml" />
+    </modules>
+  </component>
+</project>
