@@ -204,7 +204,5 @@ __kernel void computeMD5 (
         foundStatus[0] = index;
         for (i = 0; i < PASSLEN+1; i++)
             foundPass[i] = searchPass[i];
-    } /*else {
-        foundStatus[index] = -1;
-    }*/
+    }
 }

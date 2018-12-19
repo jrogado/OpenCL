@@ -50,14 +50,6 @@ public class md5CrackByte {
 
         nPasswords = (int) Math.pow(symbols.length(), PASSLEN);
         workSize = nPasswords;
-        // MD5("helloo")
-        // passHash = new char[]{0xb3, 0x73, 0x87, 0x0b, 0x91, 0x39, 0xbb, 0xad, 0xe8, 0x33, 0x96, 0xa4, 0x9b, 0x1a, 0xfc, 0x9a};
-        // foundPass = new char[]{0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x6f};
-
-        // MD5("hellooxz") = 24 ac 24 cf ed 1d d3 6f e9 a3 b1 1f 1e a5 74 61
-        //  passHash = new char[]{0x24, 0xac, 0x24, 0xcf, 0xed, 0x1d, 0xd3, 0x6f, 0xe9, 0xa3, 0xb1, 0x1f, 0x1e, 0xa5, 0x74, 0x61};
-        // foundPass = new char[]{0x68, 0x65, 0x6c, 0x6c, 0x6f, 0x6f, 0x78, 0x7a};
-
         // Convert the 32 digits hash string to crack into bytes
         // Each byte corresponds to 2 string characters: we need 16 bytes
         passHash = new byte[passHashString.length() / 2];
@@ -71,7 +63,7 @@ public class md5CrackByte {
         }
         // System.out.printf("passHash size: %d\n", passHash.length);
         foundPass = new byte[(PASSLEN+1)];
-        foundStatus = new int[]{-1, 0};
+        foundStatus = new int[]{-1, -1};
 //        foundHash = new byte[passHash.length*workSize];
 
         initCL();
@@ -79,10 +71,15 @@ public class md5CrackByte {
         passHashMem = clCreateBuffer(context, CL_MEM_READ_ONLY | CL_MEM_COPY_HOST_PTR,
                 passHash.length * Sizeof.cl_uchar, Pointer.to(passHash), null);
         clEnqueueWriteBuffer(commandQueue, passHashMem, true, 0,
-                passHash.length * Sizeof.cl_uchar, Pointer.to(passHash), 0, null, null);
+                passHash.length * Sizeof.cl_uchar, Pointer.to(passHash),
+                0, null, null);
 
-        // Create the memory object which will be filled with the result status
-        statusMem = clCreateBuffer(context, CL_MEM_WRITE_ONLY, 2*Sizeof.cl_int, null, null);
+        // Create the memory object which will be filled with the result status, previously filled with not found value (-1)
+        statusMem = clCreateBuffer(context, CL_MEM_READ_WRITE | CL_MEM_COPY_HOST_PTR,
+                2*Sizeof.cl_int, Pointer.to(foundStatus), null);
+        clEnqueueWriteBuffer(commandQueue, statusMem, true, 0,
+                2*Sizeof.cl_int, Pointer.to(foundStatus),
+                0, null, null);
 
         // Create the memory object which will be filled with the found string
         passMem = clCreateBuffer(context, CL_MEM_WRITE_ONLY,(PASSLEN+1)*Sizeof.cl_uchar, null, null); // 2
@@ -127,7 +124,7 @@ public class md5CrackByte {
      *
      */
     public static void main(String[] args) {
-        String passHashString = "594f803b380a41396ed63dca39503542";
+        String passHashString = "4f004a55c2cfd7a24efe33bae5711b11"; // 0b4e7a0e5fe84ad35fb5f95b9ceeac79
 
         // Initialize the CL context and memory objects
         final md5CrackByte md5 = new md5CrackByte(passHashString);
@@ -149,17 +146,13 @@ public class md5CrackByte {
         System.out.println("\n");
 */
         int i;
-//        for (i = 0; i < workSize; i++) {
-//            System.out.println("Id: " + i + " status: " + foundStatus[i]);
-        if (foundStatus[0] != -1) {
+        if (foundStatus[0] >= 0) {
             System.out.printf("\nDone! Node: %d found password: ", foundStatus[0]);
             printHash(foundPass, PASSLEN, "%c",true);
-//                break;
         } else {
-            System.out.println("Password hash not found");
+            System.out.println("\nPassword hash not found");
         }
         System.out.println("\nGenerating and comparing " + workSize + " MD5s took " + (stopTime - startTime) + " ms");
-
     }
 
    /**
