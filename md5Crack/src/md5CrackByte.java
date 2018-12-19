@@ -37,7 +37,7 @@ public class md5CrackByte {
     private static int nPasswords;
 
     // Number of symbols in password
-    private static final int PASSLEN = 4;
+    private static final int PASSLEN = 5;
     // The found status
     private static int[] foundStatus;
     // The found string
@@ -71,7 +71,7 @@ public class md5CrackByte {
         }
         // System.out.printf("passHash size: %d\n", passHash.length);
         foundPass = new byte[(PASSLEN+1)];
-        foundStatus = new int[workSize];
+        foundStatus = new int[]{-1, 0};
 //        foundHash = new byte[passHash.length*workSize];
 
         initCL();
@@ -82,12 +82,10 @@ public class md5CrackByte {
                 passHash.length * Sizeof.cl_uchar, Pointer.to(passHash), 0, null, null);
 
         // Create the memory object which will be filled with the result status
-        statusMem = clCreateBuffer(context, CL_MEM_WRITE_ONLY,
-                workSize*Sizeof.cl_int, null, null);
+        statusMem = clCreateBuffer(context, CL_MEM_WRITE_ONLY, 2*Sizeof.cl_int, null, null);
 
         // Create the memory object which will be filled with the found string
-        passMem = clCreateBuffer(context, CL_MEM_WRITE_ONLY,
-                (PASSLEN+1)*Sizeof.cl_uchar, null, null); // 2
+        passMem = clCreateBuffer(context, CL_MEM_WRITE_ONLY,(PASSLEN+1)*Sizeof.cl_uchar, null, null); // 2
 
     }
 
@@ -110,7 +108,7 @@ public class md5CrackByte {
 
         // Read the output status
         clEnqueueReadBuffer(commandQueue, statusMem, CL_TRUE, 0,
-                workSize*Sizeof.cl_int, Pointer.to(foundStatus), 0, null, null);
+                2*Sizeof.cl_int, Pointer.to(foundStatus), 0, null, null);
 
         clEnqueueReadBuffer(commandQueue, passMem, CL_TRUE, 0,
                 (PASSLEN+1)*Sizeof.cl_uchar, Pointer.to(foundPass), 0, null, null);
@@ -129,7 +127,7 @@ public class md5CrackByte {
      *
      */
     public static void main(String[] args) {
-        String passHashString = "d9636b3388bd7b68bc02dc92c68ea328";
+        String passHashString = "594f803b380a41396ed63dca39503542";
 
         // Initialize the CL context and memory objects
         final md5CrackByte md5 = new md5CrackByte(passHashString);
@@ -151,14 +149,14 @@ public class md5CrackByte {
         System.out.println("\n");
 */
         int i;
-        for (i = 0; i < workSize; i++) {
+//        for (i = 0; i < workSize; i++) {
 //            System.out.println("Id: " + i + " status: " + foundStatus[i]);
-            if (foundStatus[i] != -1) {
-                System.out.printf("\nDone! Node: %d Status: %d Found password: ", i, foundStatus[i]);
+            if (foundStatus[0] != -1) {
+                System.out.printf("\nDone! Node: %d found password: ", foundStatus[0]);
                 printHash(foundPass, PASSLEN, "%c",true);
-                break;
+//                break;
             }
-        }
+//        }
         System.out.println("\nGenerating and comparing " + workSize + " MD5s took " + (stopTime - startTime) + " ms");
 
     }

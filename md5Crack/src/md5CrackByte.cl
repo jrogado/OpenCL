@@ -31,7 +31,7 @@
 	a += (expr) + UINT32_C(t) + block[k];  \
 	a = b + (a << s | a >> (32 - s));
 
-#define PASSLEN 4
+#define PASSLEN 5
 #define NSYMBOLS 28
 
 __kernel void computeMD5 (
@@ -45,9 +45,9 @@ __kernel void computeMD5 (
 //    char *p = (char *)searchHash;
 
     uchar searchPass[PASSLEN+1];
-    uint power[] = {1, 28, 784, 21952, 614656, 17210368};
+    uint power[] = {1, 28, 784, 21952, 614656, 17210368, 481890304}; // 1 28 784 21952 614656 17210368 481890304
     uint index = get_global_id(0);
-    uint foundHash[4];
+    uint foundHash[PASSLEN];
     uint diff;
 
     // Generate password for this index
@@ -200,10 +200,10 @@ __kernel void computeMD5 (
 	      break;
 	}
 	if (diff == 0) {
-        foundStatus[index] = index;
+        foundStatus[0] = index;
         for (i = 0; i < PASSLEN+1; i++)
             foundPass[i] = searchPass[i];
-    } else {
+    } /*else {
         foundStatus[index] = -1;
-    }
+    }*/
 }
