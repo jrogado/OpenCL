@@ -151,12 +151,13 @@ public class md5CrackByte {
         int i;
 //        for (i = 0; i < workSize; i++) {
 //            System.out.println("Id: " + i + " status: " + foundStatus[i]);
-            if (foundStatus[0] != -1) {
-                System.out.printf("\nDone! Node: %d found password: ", foundStatus[0]);
-                printHash(foundPass, PASSLEN, "%c",true);
+        if (foundStatus[0] != -1) {
+            System.out.printf("\nDone! Node: %d found password: ", foundStatus[0]);
+            printHash(foundPass, PASSLEN, "%c",true);
 //                break;
-            }
-//        }
+        } else {
+            System.out.println("Password hash not found");
+        }
         System.out.println("\nGenerating and comparing " + workSize + " MD5s took " + (stopTime - startTime) + " ms");
 
     }

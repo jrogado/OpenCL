@@ -200,6 +200,7 @@ __kernel void computeMD5 (
 	      break;
 	}
 	if (diff == 0) {
+	    // Only one node finds it
         foundStatus[0] = index;
         for (i = 0; i < PASSLEN+1; i++)
             foundPass[i] = searchPass[i];
